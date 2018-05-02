@@ -4,7 +4,7 @@ import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
-import Button from 'material-ui/Button';
+// import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -23,17 +23,26 @@ const styles = {
 };
 
 class MenuAppBar extends React.Component {
-  state = {
-    auth: false,
-    anchorEl: null,
-  };
+  constructor(props){
+    super(props);
+    this.state = {
+      auth: false,
+      anchorEl: null,
+    };
+  }
   
+  loggedOut = () => { 
+    this.props.loggedOut()
+  }
   handleLogin = () =>{
-    this.setState({auth: true})
+    this.setState({auth: true}) 
   }
   handleLogout = () => {
+    console.log("auth", this.state.auth)
     this.setState({auth: false})
+    this.loggedOut()
   }
+  
   handleMenu = event => {
     this.setState({ anchorEl: event.currentTarget });
   }
@@ -42,9 +51,10 @@ class MenuAppBar extends React.Component {
   }
   render(){
     const { classes } = this.props;
-    const { auth, anchorEl } = this.state;
+    const { anchorEl } = this.state;
     const open = Boolean(anchorEl);
-
+    // this.props.loggedIn ? this.setState({auth:this.props.loggedIn}):""
+    
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -57,8 +67,8 @@ class MenuAppBar extends React.Component {
             </Typography>
             {/* {!auth && (<Button color="inherit">Signup</Button>)} */}
             {/* {!auth && (<Button color="inherit" onClick={this.handleLogin}>Login</Button>)} */}
-            {auth && (<Button color="inherit" onClick={this.handleLogout}>Logout</Button>)}
-            {auth && (
+            {/*auth && (<Button color="inherit" onClick={this.handleLogout}>Logout</Button>) */}
+            { this.props.loggedIn && (
                 <div>
                   <IconButton
                     aria-owns={open ? 'menu-appbar' : null}

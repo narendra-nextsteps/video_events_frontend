@@ -1,14 +1,30 @@
 import React, { Component } from 'react';
 import './App.css';
 import MenuAppBar from '../Header/Header'
-import FullWidthTabs from '../Login/Login'
+import LoginAndRegister from '../Login/Login'
+import Videos from '../Videos/Videos'
 
 class App extends Component {
+  constructor(props){
+    super();
+    this.state={
+      loginDetails : undefined,
+      loggedIn: false
+    }
+  }
   render() {
+    // console.log(this.state.loginDetails, this.state.loggedIn)
     return (
       <div className="App">
-        <MenuAppBar/>
-        <FullWidthTabs/>
+        <MenuAppBar loggedIn={this.state.loggedIn} loggedOut = {logout => this.setState({loginDetails: undefined, loggedIn:false})}/>
+        
+        {
+          // this.state.loginDetails !== undefined ?
+          // (
+            <Videos/>
+          // ):
+          // <LoginAndRegister onLogin={loginDetails => this.setState({loginDetails, loggedIn:true})}/>
+        }
       </div>
     );
   }

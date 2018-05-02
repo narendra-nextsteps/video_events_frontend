@@ -8,6 +8,7 @@ import Typography from 'material-ui/Typography';
 import { FormGroup } from 'material-ui/Form';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
+import axios from 'axios';
 
 function TabContainer({ children, dir }) {
   return (
@@ -49,10 +50,18 @@ const styles = theme => ({
 
 
 
-class FullWidthTabs extends React.Component {
-  state = {
-    value: 0,
-  };
+class LoginAndRegister extends React.Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      value: 0,
+      username: "",
+      password: "",
+      email: "", 
+      showLoginError: false
+    };
+  }
+  
 
   handleChange = (event, value) => {
     this.setState({ value });
@@ -62,11 +71,61 @@ class FullWidthTabs extends React.Component {
     this.setState({ value: index });
   };
 
+  updateUsername = event => {
+    this.setState({username:event.target.value})
+  }
+  updatePassword = event => {
+    this.setState({password:event.target.value})
+  }
+  updateEmail = event => {
+    this.setState({email:event.target.value})
+  }
+
+  handleSignup = e => {
+    // action="http://localhost:4000/register" method="POST"
+    e.preventDefault()
+
+    axios.post("http://localhost:4000/register", 
+    { username:this.state.username, 
+      password:this.state.password,
+      email:this.state.email
+    }).then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    // console.log("login values",val, FormData)
+  }
+  onLogin = (data) => {
+    this.props.onLogin(data)
+  }
+  handleLogin = e => {
+    // action="http://localhost:4000/register" method="POST"
+    e.preventDefault()
+    const that = this
+    axios.post("http://localhost:4000/login", 
+    { username:this.state.username, 
+      password:this.state.password
+    }).then(function (response) {
+      console.log(response.data);
+      response.data === "user name or password not correct" ?
+      that.setState({showLoginError:true}) :
+      that.onLogin(response.data)
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
   render() {
     const { classes, theme } = this.props;
 
     return (
       <div className={classes.root}>
+      {
+        this.state.showLoginError ? <h2 style={{color: "red"}}>Invalid username or password</h2> : ""
+      }
         <AppBar position="static" color="default">
           <Tabs
             value={this.state.value}
@@ -85,20 +144,26 @@ class FullWidthTabs extends React.Component {
           onChangeIndex={this.handleChangeIndex}
         >
           <TabContainer dir={theme.direction}>
-            <FormGroup>
+          <form onSubmit = {this.handleSignup}>
+            <FormGroup >
               <TextField
                 required
-                id="username"
+                id="usernameSignup"
                 label="username"
-                defaultValue="username"
+                name="username"
+                value={this.state.username}
+                onChange={this.updateUsername}
                 className={classes.textField}
                 margin="normal"
               />
               <TextField
                 required
-                id="password"
+                id="passwordSignup"
                 label="password"
-                defaultValue="password"
+                name="password"
+                type="password"
+                value={this.state.password}
+                onChange={this.updatePassword}
                 className={classes.textField}
                 margin="normal"
               />
@@ -106,14 +171,17 @@ class FullWidthTabs extends React.Component {
                 required
                 id="email"
                 label="email"
-                defaultValue="email"
+                name="email"
+                value={this.state.email}
+                onChange={this.updateEmail}
                 className={classes.textField}
                 margin="normal"
               />
-              <Button variant="raised" color="primary" className={classes.button}>
-                Submit
+              <Button variant="raised" color="primary" className={classes.button} type="submit">
+                Signup
               </Button>
             </FormGroup>
+            </form>
           </TabContainer>
 
           <TabContainer dir={theme.direction}>
@@ -122,7 +190,8 @@ class FullWidthTabs extends React.Component {
                 required
                 id="username"
                 label="username"
-                defaultValue="username"
+                value={this.state.username}
+                onChange={this.updateUsername}
                 className={classes.textField}
                 margin="normal"
               />
@@ -130,11 +199,13 @@ class FullWidthTabs extends React.Component {
                 required
                 id="password"
                 label="password"
-                defaultValue="password"
+                type="password"
+                value={this.state.password}
+                onChange={this.updatePassword}
                 className={classes.textField}
                 margin="normal"
               />
-              <Button variant="raised" color="primary" className={classes.button}>
+              <Button variant="raised" color="primary" className={classes.button} onClick = {this.handleLogin}>
                 Submit
               </Button>
             </FormGroup>
@@ -145,9 +216,9 @@ class FullWidthTabs extends React.Component {
   }
 }
 
-FullWidthTabs.propTypes = {
+LoginAndRegister.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(FullWidthTabs);
+export default withStyles(styles, { withTheme: true })(LoginAndRegister);
