@@ -13,17 +13,17 @@ class App extends Component {
     }
   }
   render() {
-    // console.log(this.state.loginDetails, this.state.loggedIn)
+    console.log(this.state.loginDetails, this.state.loggedIn)
     return (
       <div className="App">
         <MenuAppBar loggedIn={this.state.loggedIn} loggedOut = {logout => this.setState({loginDetails: undefined, loggedIn:false})}/>
         
         {
-          // this.state.loginDetails !== undefined ?
-          // (
-            <Videos/>
-          // ):
-          // <LoginAndRegister onLogin={loginDetails => this.setState({loginDetails, loggedIn:true})}/>
+          this.state.loginDetails !== undefined ?
+          (
+            <Videos loginDetails = {this.state.loginDetails}/>
+          ):
+          <LoginAndRegister onLogin={loginDetails => this.setState({loginDetails, loggedIn:true})}/>
         }
       </div>
     );
