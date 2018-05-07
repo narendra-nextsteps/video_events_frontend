@@ -35,7 +35,6 @@ class Videos extends Component {
       mainVideo:videos[0][0],
       eventDetails : []
     }
-    
   }
 
   componentDidMount = () => {

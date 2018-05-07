@@ -3,6 +3,7 @@ import './App.css';
 import MenuAppBar from '../Header/Header'
 import LoginAndRegister from '../Login/Login'
 import Videos from '../Videos/Videos'
+import VideosDashboard from '../Videos/VideosDashboard';
 
 class App extends Component {
   constructor(props){
@@ -17,13 +18,13 @@ class App extends Component {
     return (
       <div className="App">
         <MenuAppBar loggedIn={this.state.loggedIn} loggedOut = {logout => this.setState({loginDetails: undefined, loggedIn:false})}/>
-        
+        <VideosDashboard/>
         {
-          this.state.loginDetails !== undefined ?
-          (
-            <Videos loginDetails = {this.state.loginDetails}/>
-          ):
-          <LoginAndRegister onLogin={loginDetails => this.setState({loginDetails, loggedIn:true})}/>
+        //   this.state.loginDetails !== undefined ?
+        //   (
+            // <Videos loginDetails = {this.state.loginDetails}/>
+          // ):
+          // <LoginAndRegister onLogin={loginDetails => this.setState({loginDetails, loggedIn:true})}/>
         }
       </div>
     );
